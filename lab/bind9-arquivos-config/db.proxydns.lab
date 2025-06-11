@@ -1,0 +1,32 @@
+
+
+          ;MEUS APRENDIZADOS
+;AQUI É O ARQUIVO DE ZONA PRINCIPAL
+;nginx              A       172.18.0.4       ; IP do container nginx, ele faz o proxy reverso para os servidores - deixei essa linha comentada, caso precise dela
+
+;esse arquivo é o primeiro arquivo a ser observado quando uma requisição chega. Ele vai verificar qual ip é dono daquele nome que vc esta solicitando.
+;ex: clicou em index, arquivo html que esta em apachered, apachered tem um ip. É isso que vai fazer esse arquivo.
+;@ IN NS e ns IN A: Define corretamente o servidor DNS autoritativo (o próprio Bind9). são as linhas
+
+
+;ESSE PRIMEIRO BLOCO É O REGISTRO SOA (START OF AUTORITY)
+
+
+$TTL    604800
+
+@       IN      SOA     ns.proxydns.lab. root.proxydns.lab. (
+                        2025060901  ; Serial (ano/mês/dia + versão)
+                        604800      ; Refresh
+                        86400       ; Retry
+                        2419200     ; Expire
+                        604800 )    ; Negative Cache TTL
+
+        IN      NS      ns.proxydns.lab.   ;Registro A do nameserver (necessário!)
+ns              IN      A       172.18.0.4
+
+; Registros A dos serviços
+proxydns.lab.    IN      A       172.18.0.4       ; Container Nginx (proxy reverso)
+apachevermelho.proxydns.lab.     IN      A       172.18.0.2       ;  apachevermelho
+apacheverde.proxydns.lab.     IN      A       172.18.0.3       ; apacheverde
+
+

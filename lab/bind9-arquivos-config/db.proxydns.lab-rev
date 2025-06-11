@@ -1,0 +1,13 @@
+$TTL 604800
+@   IN  SOA ns.proxydns.lab. root.proxydns.lab. (
+        2025060902 ; Serial
+        604800     ; Refresh
+        86400      ; Retry
+        2419200    ; Expire
+        604800 )   ; Negative Cache TTL
+
+@       IN  NS      ns.proxydns.lab.
+
+2       IN  PTR     apachevermelho.proxydns.lab.
+3       IN  PTR     apacheverde.proxydns.lab.
+4       IN  PTR     proxydns.lab.

@@ -1,0 +1,9 @@
+zone "proxydns.lab" {
+    type master;
+    file "/etc/bind/db.proxydns.lab";
+};
+
+zone "0.18.172.in-addr.arpa" {
+    type master;
+    file "/etc/bind/db.172.18.0";
+};

@@ -1,0 +1,70 @@
+
+#  How I Make Kamikaze Drones 
+#https://www.youtube.com/watch?v=hriCrLcjKAo
+
+---
+services:
+  bind9:
+    image: ubuntu/bind9
+    container_name: bind9
+    networks:
+          network-lab-dns:
+            ipv4_address: 172.18.0.5
+    volumes:
+      - ./bind9-arquivos-config:/etc/bind
+    ports:
+          - "53:53/udp"
+          - "53:53/tcp"
+    expose:
+          - 53
+  apachered:
+    image: httpd:2.4
+    container_name: apachered
+    volumes:
+      - ./public-html/:/usr/local/apache2/htdocs/:ro
+      - ./my-httpd.conf:/usr/local/apache2/conf/httpd.conf:ro
+    depends_on:
+      - bind9
+    expose:
+      - 8080
+    networks:
+      network-lab-dns:
+        ipv4_address: 172.18.0.2
+  apachegreen:
+    image: httpd:2.4
+    container_name: apachegreen
+    ports:
+      - 9090
+    volumes:
+      - ./public2-html/:/usr/local/apache2/htdocs:ro
+      - ./my2-httpd.conf:/usr/local/apache2/conf/httpd.conf:ro
+    depends_on:
+      - bind9
+    networks:
+      network-lab-dns:
+        ipv4_address: 172.18.0.3
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"   
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - apachered
+      - apachegreen
+      - bind9
+    restart: always
+    networks:
+      network-lab-dns:
+        ipv4_address: 172.18.0.4
+volumes:
+  public-html:
+  public2-html:
+networks:
+  network-lab-dns:
+    driver: bridge
+    ipam:
+        config:
+        - subnet: 172.18.0.0/16
+          gateway: 172.18.0.1
