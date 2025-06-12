@@ -1,4 +1,6 @@
 *.yml linguist-detectable=true
 *.yaml linguist-detectable=true
 
+nginx.config linguist-language=Nginx
+
 
